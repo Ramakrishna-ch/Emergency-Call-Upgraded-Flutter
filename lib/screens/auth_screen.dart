@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../rest/auth.dart';
 
 class AuthScreen extends StatefulWidget {
+  static const routeName = '/auth-screen';
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }

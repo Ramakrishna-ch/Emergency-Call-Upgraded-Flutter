@@ -1,3 +1,6 @@
+import 'package:sms_test/screens/registerpage.dart';
+import 'package:sms_test/screens/startup_screen.dart';
+
 import './screens/auth_screen.dart';
 import './screens/location.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +16,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AuthScreen(),
+      home: StartUpScreen(),
       routes: {
+        AuthScreen.routeName: (ctx) => AuthScreen(),
         GetLocationPage.routeName: (ctx) => GetLocationPage(),
+        RegisterPage.routeName: (ctx) => RegisterPage()
       },
     );
   }

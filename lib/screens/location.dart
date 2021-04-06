@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:location/location.dart';
 import 'package:sms_test/rest/auth.dart';
 import '../rest/getdata.dart';
+import '../rest/getDetails.dart';
 
 class GetLocationPage extends StatefulWidget {
   static const routeName = '/GetLocationPage';
@@ -14,6 +16,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
   Auth auth = Auth();
 
   Map<String, double> userLocation;
+  GetData getdat = GetData();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,6 @@ class _GetLocationPageState extends State<GetLocationPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                GetData getdat = GetData();
                 print(data['tokenType']);
                 final String locdat = userLocation['latitude'].toString() +
                     ',' +
@@ -58,6 +60,14 @@ class _GetLocationPageState extends State<GetLocationPage> {
                     data['tokenType'], data['accessToken'], locdat);
               },
               child: Text('Get Data'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                GetDetails getplace = GetDetails();
+                final place = getdat.copycontent();
+                getplace.fetchDat(place);
+              },
+              child: Text('copy'),
             ),
           ],
         ),
