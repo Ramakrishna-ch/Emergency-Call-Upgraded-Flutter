@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sms_test/screens/startup_screen.dart';
 import 'dart:ui';
-
+import '../rest/signup.dart';
 import 'package:sms_test/widgets/loginpage.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -23,13 +23,62 @@ class _RegisterPageState extends State<RegisterPage> {
     'gender': 'Male',
     'emergency': '',
   };
-  void genda() {
+
+  Signup regobj = Signup();
+  Future<void> _submit(
+      Function check1, BuildContext context, Function check2) async {
     if (!_form.currentState.validate()) {
       return;
     }
-
     _form.currentState.save();
-    print(edituserdetails);
+    if (edituserdetails['userid'].length == 10 &&
+        edituserdetails['userid'].contains(RegExp(r'[0-9]'))) {
+      try {
+        await check1('phone', edituserdetails['userid']);
+        try {
+          await check2(edituserdetails, 'phone');
+          Navigator.of(context).pop();
+        } catch (e) {
+          print(e);
+          return;
+        }
+      } catch (e) {
+        print('phone no already exists');
+        _showToast(context, 'phone no already exists');
+        return;
+      }
+    }
+    if (edituserdetails['userid'].contains('@') &&
+        edituserdetails['userid'].contains(RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+      String email = edituserdetails['userid'].replaceAll(".", "");
+      email = email.replaceAll("@", "");
+      edituserdetails['userid'] = email;
+      try {
+        await (check1('email', email));
+        try {
+          await check2(edituserdetails, 'email');
+          Navigator.of(context).pop();
+        } catch (e) {
+          print(e);
+          return;
+        }
+      } catch (e) {
+        print('Email already exists');
+        _showToast(context, 'Email already exists');
+        return;
+      }
+    }
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   final Shader linearGradient = LinearGradient(
@@ -133,10 +182,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 if (value.isEmpty) {
                                   return 'Provide emailid or number';
                                 } else if (value.contains(RegExp(r'[0-9]')) &&
-                                    value.length != 10) {
+                                    value.length != 10 &&
+                                    !value.contains('@')) {
                                   return 'Invalid number';
                                 } else if (value.length == 10 &&
                                     value.contains(RegExp(r'[0-9]'))) {
+                                  edituserdetails['userid'] = value;
                                   return null;
                                 } else if (!value.contains('@') ||
                                     !value.contains(RegExp(
@@ -351,7 +402,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   color: Colors.white,
                 ),
                 child: TextButton(
-                  onPressed: () => genda(),
+                  onPressed: () =>
+                      _submit(regobj.checkid, context, regobj.signupuser),
                   child: Text(
                     'SignUp',
                     style: TextStyle(

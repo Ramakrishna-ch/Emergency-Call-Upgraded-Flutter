@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_gradient_text/easy_gradient_text.dart';
 
 class LoginPage extends StatelessWidget {
-  
   final Shader linearGradient = LinearGradient(
     colors: <Color>[
       Colors.red,
@@ -43,7 +42,7 @@ class LoginPage extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Username',
+                        hintText: 'Email or phone',
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.black45),
                         ),
