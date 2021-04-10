@@ -1,6 +1,8 @@
 import 'package:sms_test/screens/registerpage.dart';
+import 'package:sms_test/screens/splash_screen.dart';
 import 'package:sms_test/screens/startup_screen.dart';
-
+import 'package:sms_test/widgets/loginpage.dart';
+import './rest/login.dart';
 import './screens/auth_screen.dart';
 import './screens/location.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: StartUpScreen(),
+      home: FutureBuilder(
+        future: Login().checkuser(),
+        builder: (ctx, autosnap) {
+          if (autosnap.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          } else if (autosnap.connectionState == ConnectionState.done) {
+            if (autosnap.data == true) {
+              return AuthScreen();
+            } else {
+              return StartUpScreen();
+            }
+          }
+        },
+      ),
       routes: {
         AuthScreen.routeName: (ctx) => AuthScreen(),
         GetLocationPage.routeName: (ctx) => GetLocationPage(),

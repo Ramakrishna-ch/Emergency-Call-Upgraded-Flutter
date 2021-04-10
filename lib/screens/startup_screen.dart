@@ -48,8 +48,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
       try {
         await check1(loginDat, 'phone');
         print('login successful');
-        _showToast1(
-            context, 'Save password', 'phone', loginDat['userid'], check2);
+        _showToast1(context, 'Save password', 'phone', loginDat, check2);
       } catch (e) {
         if (e == 'Email or Phone doesn\'t exists') {
           print(e);
@@ -71,8 +70,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
       try {
         await check1(loginDat, 'email');
         print('login successful');
-        _showToast1(
-            context, 'Save password', 'email', loginDat['userid'], check2);
+        _showToast1(context, 'Save password', 'email', loginDat, check2);
       } catch (e) {
         if (e == 'Email or Phone doesn\'t exists') {
           print(e);
@@ -98,7 +96,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
   }
 
   Future<void> _showToast1(BuildContext context, String message, String type,
-      String id, Function check1) async {
+      Map<String, String> id, Function check1) async {
     showDialog(
       context: context,
       builder: (BuildContext context1) {
@@ -341,12 +339,10 @@ class _StartUpScreenState extends State<StartUpScreen> {
                         SizedBox(
                           height: 88,
                         ),
-                        TextButton(
-                          child: Text(
-                            'New User? Register Now',
-                            style: TextStyle(
-                                foreground: Paint()..shader = linearGradient),
-                          ),
+                        Text(
+                          'New User? Register Now',
+                          style: TextStyle(
+                              foreground: Paint()..shader = linearGradient),
                         ),
                       ],
                     ),
