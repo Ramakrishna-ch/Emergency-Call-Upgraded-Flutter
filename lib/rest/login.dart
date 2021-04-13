@@ -1,9 +1,17 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_test/main.dart';
+import 'package:provider/provider.dart';
 
-class Login {
+class Login with ChangeNotifier {
+  Map<String, String> _mainid = {'userid': '', 'type': ''};
+  Map<String, String> get getid {
+    return _mainid;
+  }
+
   Future<void> loginuser(Map<String, String> logindat, String type) async {
     final id = logindat['userid'];
     var url =
@@ -17,6 +25,9 @@ class Login {
       } else if (extractedData['cfnpass'] != logindat['password']) {
         throw ('Wrong password');
       }
+      _mainid['userid'] = id;
+      _mainid['type'] = type;
+      notifyListeners();
     } catch (e) {
       throw (e);
     }
@@ -67,6 +78,9 @@ class Login {
           DateTime.parse(extractedData['lastlogin'])
               .isAfter(DateTime.now().subtract(Duration(days: 30)))) {
         print('right');
+        _mainid['userid'] = extractedDataTokenData['userid'];
+        _mainid['type'] = extractedDataTokenData['type'];
+        notifyListeners();
         return true;
       } else {
         print('wrong');
@@ -75,5 +89,21 @@ class Login {
     }
     print('no token');
     return false;
+  }
+
+  Future<void> logout() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('tokenData');
+      var url =
+          "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/${_mainid['type']}/${_mainid['userid']}.json";
+
+      final response = await http.patch(url,
+          body: json.encode({
+            'auto': 'false',
+          }));
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -6,6 +6,7 @@ import '../screens/registerpage.dart';
 import '../widgets/loginpage.dart';
 
 class StartUpScreen extends StatefulWidget {
+  static const routename = '/startup';
   @override
   _StartUpScreenState createState() => _StartUpScreenState();
 }
