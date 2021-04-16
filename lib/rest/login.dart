@@ -7,9 +7,19 @@ import 'package:sms_test/main.dart';
 import 'package:provider/provider.dart';
 
 class Login with ChangeNotifier {
-  Map<String, String> _mainid = {'userid': '', 'type': ''};
-  Map<String, String> get getid {
-    return _mainid;
+  String _userid;
+  String _type;
+  final Map<String, String> userdat = Map<String, String>();
+  String get userid {
+    return _userid;
+  }
+
+  bool get isauth {
+    return _userid != null;
+  }
+
+  String get type {
+    return _type;
   }
 
   Future<void> loginuser(Map<String, String> logindat, String type) async {
@@ -25,9 +35,11 @@ class Login with ChangeNotifier {
       } else if (extractedData['cfnpass'] != logindat['password']) {
         throw ('Wrong password');
       }
-      _mainid['userid'] = id;
-      _mainid['type'] = type;
-      notifyListeners();
+
+      // userdat = extractedData as Map<String, String>;
+      // // extracteduserdata['userid'] = _mainid['userid'];
+      // notifyListeners();
+      print('test');
     } catch (e) {
       throw (e);
     }
@@ -41,7 +53,7 @@ class Login with ChangeNotifier {
     try {
       final response = await http.patch(url,
           body: json.encode({
-            'auto': autosav,
+            'auto': 'true',
             'lastlogin': logtime,
           }));
       final prefs = await SharedPreferences.getInstance();
@@ -51,26 +63,31 @@ class Login with ChangeNotifier {
         'password': id['password'],
       });
       prefs.setString('tokenData', tokenData);
+      _userid = id['userid'];
+      _type = type;
+      notifyListeners();
     } catch (e) {
       print(e);
     }
   }
 
   Future<bool> checkuser() async {
+    var url =
+        "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/";
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('tokenData')) {
       print('token data');
       final extractedDataTokenData =
           json.decode(prefs.getString('tokenData')) as Map<String, Object>;
       print(extractedDataTokenData);
-      var url =
-          "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/${extractedDataTokenData['type']}/${extractedDataTokenData['userid']}.json";
 
-      final response = await http.get(url);
+      final response = await http.get(url +
+          "${extractedDataTokenData['type']}/${extractedDataTokenData['userid']}.json");
       final extractedData = json.decode(response.body);
       print(extractedData);
       if (extractedData == null) {
         print('null return');
+
         return false;
       } else if (extractedData['cfnpass'] ==
               extractedDataTokenData['password'] &&
@@ -78,30 +95,79 @@ class Login with ChangeNotifier {
           DateTime.parse(extractedData['lastlogin'])
               .isAfter(DateTime.now().subtract(Duration(days: 30)))) {
         print('right');
-        _mainid['userid'] = extractedDataTokenData['userid'];
-        _mainid['type'] = extractedDataTokenData['type'];
+        await http.patch(
+            url +
+                "${extractedDataTokenData['type']}/${extractedDataTokenData['userid']}.json",
+            body: json.encode({
+              'lastlogin': DateTime.now().toIso8601String(),
+            }));
+        _userid = extractedDataTokenData['userid'];
+        _type = extractedDataTokenData['type'];
+        extractedData.forEach((key, value) => userdat[key] = value?.toString());
+        userdat.remove('auto');
+        userdat.remove('lastlogin');
+        userdat['userid'] = _userid;
+        print(_type);
+        if (_type == 'email') {
+          String sample = _userid.replaceAll('gmailcom', '@gmail.com');
+          userdat['userid'] = sample;
+        }
+
+        userdat['password'] = userdat['cfnpass'];
         notifyListeners();
+        print(userdat);
+        // extracteduserdata = extractedData;
+        // extracteduserdata['userid'] = _mainid['userid'];
+        // extracteduserdata['password'] = extractedDataTokenData['password'];
+
+        // print(extracteduserdata);
         return true;
       } else {
         print('wrong');
         return false;
       }
+    } else {
+      print('no token');
+
+      return false;
     }
-    print('no token');
-    return false;
   }
 
   Future<void> logout() async {
+    var url =
+        "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/$_type/$_userid.json";
     try {
+      final response =
+          await http.patch(url, body: json.encode({'auto': "false"}));
       final prefs = await SharedPreferences.getInstance();
-      prefs.remove('tokenData');
-      var url =
-          "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/${_mainid['type']}/${_mainid['userid']}.json";
+      await prefs.remove('tokenData');
+      _userid = null;
+      _type = null;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 
-      final response = await http.patch(url,
-          body: json.encode({
-            'auto': 'false',
-          }));
+  Future<void> editDetails(String type, Map<String, String> details) async {
+    String id = details['userid'];
+    details.remove('userid');
+    details.remove('password');
+    print(details);
+    var url =
+        "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/$type/$id.json";
+    try {
+      final response = await http.patch(url, body: json.encode(details));
+      final prefs = await SharedPreferences.getInstance();
+      final tokenData = json.encode({
+        'type': type,
+        'userid': id,
+        'password': details['cfnpass'],
+      });
+      prefs.setString('tokenData', tokenData);
+      _userid = id;
+      _type = type;
+      notifyListeners();
     } catch (e) {
       print(e);
     }

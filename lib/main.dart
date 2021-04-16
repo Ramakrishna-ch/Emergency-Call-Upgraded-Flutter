@@ -1,9 +1,11 @@
 import 'package:provider/provider.dart';
-import 'package:sms_test/screens/drawpage.dart';
-import 'package:sms_test/screens/registerpage.dart';
-import 'package:sms_test/screens/splash_screen.dart';
-import 'package:sms_test/screens/startup_screen.dart';
-import 'package:sms_test/widgets/loginpage.dart';
+import './screens/drawpage.dart';
+import './screens/editDetails.dart';
+import './screens/emergencycontacts.dart';
+import './screens/registerpage.dart';
+import './screens/splash_screen.dart';
+import './screens/startup_screen.dart';
+import './widgets/loginpage.dart';
 import './rest/login.dart';
 import './screens/auth_screen.dart';
 import './screens/location.dart';
@@ -18,38 +20,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: Login(),
+        ChangeNotifierProvider(
+          create: (ctx) => Login(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: FutureBuilder(
-          future: Login().checkuser(),
-          builder: (ctx, autosnap) {
-            if (autosnap.connectionState == ConnectionState.waiting) {
-              return SplashScreen();
-            } else if (autosnap.connectionState == ConnectionState.done) {
-              if (autosnap.data == true) {
-                print('main');
-                return AuthScreen();
-              } else {
-                print('fail');
-                return StartUpScreen();
-              }
-            }
+      child: Consumer<Login>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: auth.isauth
+              ? DrawPage()
+              : FutureBuilder(
+                  future: auth.checkuser(),
+                  builder: (ctx, autosnap) =>
+                      autosnap.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : StartUpScreen(),
+                ),
+          routes: {
+            AuthScreen.routeName: (ctx) => AuthScreen(),
+            GetLocationPage.routeName: (ctx) => GetLocationPage(),
+            RegisterPage.routeName: (ctx) => RegisterPage(),
+            StartUpScreen.routename: (ctx) => StartUpScreen(),
+            DrawPage.routename: (ctx) => DrawPage(),
+            EditDetails.routename: (ctx) => EditDetails(),
+            EmergencyContacts.routename: (ctx) => EmergencyContacts(),
           },
         ),
-        routes: {
-          AuthScreen.routeName: (ctx) => AuthScreen(),
-          GetLocationPage.routeName: (ctx) => GetLocationPage(),
-          RegisterPage.routeName: (ctx) => RegisterPage(),
-          StartUpScreen.routename: (ctx) => StartUpScreen(),
-          DrawPage.routename: (ctx) => DrawPage(),
-        },
       ),
     );
   }

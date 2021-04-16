@@ -4,6 +4,7 @@ import 'package:sms_test/screens/auth_screen.dart';
 import '../rest/login.dart';
 import '../screens/registerpage.dart';
 import '../widgets/loginpage.dart';
+import 'package:provider/provider.dart';
 
 class StartUpScreen extends StatefulWidget {
   static const routename = '/startup';
