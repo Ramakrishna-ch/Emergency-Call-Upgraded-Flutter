@@ -1,6 +1,7 @@
 import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:sms_test/screens/auth_screen.dart';
+import 'package:sms_test/screens/drawpage.dart';
 import '../rest/login.dart';
 import '../screens/registerpage.dart';
 import '../widgets/loginpage.dart';
@@ -113,7 +114,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
                   await check1('true', type, id);
                   Navigator.of(context1).pop();
                   Navigator.of(context)
-                      .pushReplacementNamed(AuthScreen.routeName);
+                      .pushReplacementNamed(DrawPage.routename);
                 } catch (e) {
                   print(e);
                   Navigator.of(context1).pop();

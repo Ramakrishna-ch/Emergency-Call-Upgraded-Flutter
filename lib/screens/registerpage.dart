@@ -81,6 +81,28 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget textfield(
+      String label, TextInputType keyname, Function validate, Function saved) {
+    return TextFormField(
+      cursorColor: Colors.white,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: label,
+        errorStyle: TextStyle(color: Colors.white),
+        hintStyle: TextStyle(color: Colors.white),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+      ),
+      keyboardType: keyname,
+      validator: validate,
+      onSaved: saved,
+    );
+  }
+
   final Shader linearGradient = LinearGradient(
     colors: <Color>[
       Colors.red,
@@ -135,149 +157,76 @@ class _RegisterPageState extends State<RegisterPage> {
                         key: _form,
                         child: Column(
                           children: <Widget>[
-                            TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Name',
-                                errorStyle: TextStyle(color: Colors.white),
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              ),
-                              keyboardType: TextInputType.name,
-                              validator: (value) {
+                            textfield(
+                              'Name',
+                              TextInputType.name,
+                              (value) {
                                 if (value.isEmpty) {
                                   return 'Name cannot be empty';
                                 }
                                 return null;
                               },
-                              onSaved: (value) {
+                              (value) {
                                 edituserdetails['name'] = value;
                               },
                             ),
                             SizedBox(
                               height: 40,
                             ),
-                            TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Email or Phone number',
-                                errorStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Provide emailid or number';
-                                } else if (value.contains(RegExp(r'[0-9]')) &&
-                                    value.length != 10 &&
-                                    !value.contains('@')) {
-                                  return 'Invalid number';
-                                } else if (value.length == 10 &&
-                                    value.contains(RegExp(r'[0-9]'))) {
-                                  edituserdetails['userid'] = value;
-                                  return null;
-                                } else if (!value.contains('@') ||
-                                    !value.contains(RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
-                                  return 'Invalid email';
-                                }
+                            textfield('Email or Phone number',
+                                TextInputType.emailAddress, (value) {
+                              if (value.isEmpty) {
+                                return 'Provide emailid or number';
+                              } else if (value.contains(RegExp(r'[0-9]')) &&
+                                  value.length != 10 &&
+                                  !value.contains('@')) {
+                                return 'Invalid number';
+                              } else if (value.length == 10 &&
+                                  value.contains(RegExp(r'[0-9]'))) {
                                 edituserdetails['userid'] = value;
                                 return null;
-                              },
-                            ),
+                              } else if (!value.contains('@') ||
+                                  !value.contains(RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+                                return 'Invalid email';
+                              }
+                              edituserdetails['userid'] = value;
+                              return null;
+                            }, null),
                             SizedBox(
                               height: 40,
                             ),
-                            TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Phone or Contact number',
-                                errorStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              ),
-                              keyboardType: TextInputType.phone,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Number cannot be empty';
-                                } else if (!value.contains(RegExp(r'[0-9]')) ||
-                                    value.length != 10) {
-                                  return 'Invalid number';
-                                }
-                                edituserdetails['contact'] = value;
-                                return null;
-                              },
-                            ),
+                            textfield(
+                                'Phone or Contact number', TextInputType.phone,
+                                (value) {
+                              if (value.isEmpty) {
+                                return 'Number cannot be empty';
+                              } else if (!value.contains(RegExp(r'[0-9]')) ||
+                                  value.length != 10) {
+                                return 'Invalid number';
+                              }
+                              edituserdetails['contact'] = value;
+                              return null;
+                            }, null),
                             SizedBox(height: 40),
-                            TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'password',
-                                errorStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              ),
-                              obscureText: true,
-                              keyboardType: TextInputType.visiblePassword,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Provide password';
-                                } else if (!value.contains(RegExp(
-                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'))) {
-                                  return 'Invalid Password';
-                                }
-                                edituserdetails['password'] = value;
-                                return null;
-                              },
-                            ),
+                            textfield('password', TextInputType.visiblePassword,
+                                (value) {
+                              if (value.isEmpty) {
+                                return 'Provide password';
+                              } else if (!value.contains(RegExp(
+                                  r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'))) {
+                                return 'Invalid Password';
+                              }
+                              edituserdetails['password'] = value;
+                              return null;
+                            }, null),
                             SizedBox(
                               height: 40,
                             ),
-                            TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                errorStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                hintText: 'confirm password',
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              ),
-                              obscureText: true,
-                              keyboardType: TextInputType.visiblePassword,
-                              validator: (value) {
+                            textfield(
+                              'confirm password',
+                              TextInputType.visiblePassword,
+                              (value) {
                                 if (value.isEmpty) {
                                   return 'Please re-enter password';
                                 } else if (!value.contains(RegExp(
@@ -289,30 +238,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                 }
                                 return null;
                               },
-                              onSaved: (value) {
+                              (value) {
                                 edituserdetails['cfnpass'] = value;
                               },
                             ),
                             SizedBox(
                               height: 40,
                             ),
-                            TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Emergency contact',
-                                errorStyle: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                              ),
-                              keyboardType: TextInputType.phone,
-                              validator: (value) {
+                            textfield(
+                              'Emergency contact',
+                              TextInputType.phone,
+                              (value) {
                                 if (value.isEmpty) {
                                   return 'Number cannot be empty';
                                 } else if (!value.contains(RegExp(r'[0-9]')) ||
@@ -324,7 +260,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 }
                                 return null;
                               },
-                              onSaved: (value) {
+                              (value) {
                                 edituserdetails['emergency'] = value;
                               },
                             ),

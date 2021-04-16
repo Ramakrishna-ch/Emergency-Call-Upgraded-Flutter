@@ -10,6 +10,7 @@ class Login with ChangeNotifier {
   String _userid;
   String _type;
   final Map<String, String> userdat = Map<String, String>();
+  List<String> emerContacts = [];
   String get userid {
     return _userid;
   }
@@ -20,6 +21,10 @@ class Login with ChangeNotifier {
 
   String get type {
     return _type;
+  }
+
+  List<String> get emer {
+    return [...emerContacts];
   }
 
   Future<void> loginuser(Map<String, String> logindat, String type) async {
@@ -35,10 +40,12 @@ class Login with ChangeNotifier {
       } else if (extractedData['cfnpass'] != logindat['password']) {
         throw ('Wrong password');
       }
-
+      extractedData.forEach((key, value) => userdat[key] = value?.toString());
+      emerContacts.addAll(userdat['emercontacts'].split(" "));
+      userdat.remove('emercontacts');
       // userdat = extractedData as Map<String, String>;
       // // extracteduserdata['userid'] = _mainid['userid'];
-      // notifyListeners();
+      notifyListeners();
       print('test');
     } catch (e) {
       throw (e);
@@ -65,6 +72,13 @@ class Login with ChangeNotifier {
       prefs.setString('tokenData', tokenData);
       _userid = id['userid'];
       _type = type;
+      userdat['userid'] = _userid;
+      print(_type);
+      if (_type == 'email') {
+        String sample = _userid.replaceAll('gmailcom', '@gmail.com');
+        userdat['userid'] = sample;
+      }
+      userdat['password'] = userdat['cfnpass'];
       notifyListeners();
     } catch (e) {
       print(e);
@@ -104,6 +118,8 @@ class Login with ChangeNotifier {
         _userid = extractedDataTokenData['userid'];
         _type = extractedDataTokenData['type'];
         extractedData.forEach((key, value) => userdat[key] = value?.toString());
+        emerContacts.addAll(userdat['emercontacts'].split(" "));
+        userdat.remove('emercontacts');
         userdat.remove('auto');
         userdat.remove('lastlogin');
         userdat['userid'] = _userid;
@@ -115,7 +131,7 @@ class Login with ChangeNotifier {
 
         userdat['password'] = userdat['cfnpass'];
         notifyListeners();
-        print(userdat);
+        print(emerContacts);
         // extracteduserdata = extractedData;
         // extracteduserdata['userid'] = _mainid['userid'];
         // extracteduserdata['password'] = extractedDataTokenData['password'];
