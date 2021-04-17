@@ -110,31 +110,80 @@ class _EditDetailsState extends State<EditDetails> {
 
   Widget textfield(String initname, bool auth, String label,
       TextInputType keyname, Function validate, Function saved) {
-    return TextFormField(
-      cursorColor: Colors.white,
-      readOnly: edit,
-      initialValue: _initvalues[initname],
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(
-          color: Colors.black54,
+    if (initname == 'password' || initname == 'cfnpass') {
+      return Column(
+        children: <Widget>[
+          TextFormField(
+            cursorColor: Colors.white,
+            obscureText: eyeval,
+            readOnly: initname == 'userid' ? true : !edit,
+            initialValue: _initvalues[initname],
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: TextStyle(
+                color: Colors.black54,
+              ),
+              errorStyle: TextStyle(
+                color: Colors.red,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+            ),
+            keyboardType: keyname,
+            validator: validate,
+            onSaved: saved,
+          ),
+          eyeval
+              ? IconButton(
+                  icon: Icon(Icons.visibility_outlined),
+                  onPressed: () {
+                    setState(() {
+                      eyeval = !eyeval;
+                    });
+                  })
+              : IconButton(
+                  icon: Icon(Icons.visibility_off_outlined),
+                  onPressed: () {
+                    setState(() {
+                      eyeval = !eyeval;
+                    });
+                  }),
+        ],
+      );
+    } else {
+      return TextFormField(
+        cursorColor: Colors.white,
+        readOnly: initname == 'userid' ? true : !edit,
+        initialValue: _initvalues[initname],
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(
+            color: Colors.black54,
+          ),
+          errorStyle: TextStyle(
+            color: Colors.red,
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
         ),
-        errorStyle: TextStyle(
-          color: Colors.red,
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-        ),
-      ),
-      keyboardType: keyname,
-      validator: validate,
-      onSaved: saved,
-    );
+        keyboardType: keyname,
+        validator: validate,
+        onSaved: saved,
+      );
+    }
   }
+
+  bool eyeval = false;
 
   @override
   Widget build(BuildContext context) {

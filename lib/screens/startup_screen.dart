@@ -141,6 +141,8 @@ class _StartUpScreenState extends State<StartUpScreen> {
     );
   }
 
+  bool eyeval = false;
+
   @override
   Widget build(BuildContext context) {
     final dynamicHeight = MediaQuery.of(context).size.height;
@@ -301,6 +303,23 @@ class _StartUpScreenState extends State<StartUpScreen> {
                                   keyboardType: TextInputType.text,
                                 ),
                               ),
+                              eyeval
+                                  ? IconButton(
+                                      icon: Icon(Icons.visibility_outlined),
+                                      onPressed: () {
+                                        setState(() {
+                                          eyeval = !eyeval;
+                                        });
+                                      })
+                                  : IconButton(
+                                      icon: Icon(
+                                        Icons.visibility_off_outlined,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          eyeval = !eyeval;
+                                        });
+                                      }),
                             ],
                           ),
                         ),
