@@ -38,6 +38,7 @@ class _EditDetailsState extends State<EditDetails> {
   ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   bool isinit = true;
+  bool edit = false;
   @override
   void didChangeDependencies() {
     if (isinit) {
@@ -111,7 +112,7 @@ class _EditDetailsState extends State<EditDetails> {
       TextInputType keyname, Function validate, Function saved) {
     return TextFormField(
       cursorColor: Colors.white,
-      readOnly: auth,
+      readOnly: edit,
       initialValue: _initvalues[initname],
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
@@ -143,6 +144,15 @@ class _EditDetailsState extends State<EditDetails> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(67, 206, 162, 1),
         title: Text('Edit Profile'),
+        actions: [
+          Switch(
+              value: edit,
+              onChanged: (val) {
+                setState(() {
+                  edit = val;
+                });
+              }),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(

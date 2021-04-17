@@ -188,4 +188,15 @@ class Login with ChangeNotifier {
       print(e);
     }
   }
+
+  Future<void> editContacts(String contacts) async {
+    var url =
+        "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/$_type/$_userid.json";
+    try {
+      final response =
+          await http.patch(url, body: json.encode({'emercontacts': contacts}));
+    } catch (e) {
+      throw (e);
+    }
+  }
 }

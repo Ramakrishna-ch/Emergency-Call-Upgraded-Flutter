@@ -25,7 +25,7 @@ class Signup {
     userDat.addAll({
       'auto': 'false',
       'lastlogin': '',
-      'emercontacts': userDat['emergency'] + " " + userDat['contact'],
+      'emercontacts': userDat['emergency'],
     });
     var url =
         "https://emergency-call-app-275218-default-rtdb.firebaseio.com/authetication/$type/$id.json";
