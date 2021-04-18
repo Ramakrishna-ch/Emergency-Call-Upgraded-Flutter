@@ -1,6 +1,3 @@
-import 'package:provider/provider.dart';
-import 'package:sms_test/screens/startup_screen.dart';
-import 'package:sms_test/widgets/loginpage.dart';
 import '../screens/location.dart';
 import 'package:flutter/material.dart';
 import '../rest/auth.dart';

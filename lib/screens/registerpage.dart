@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sms_test/screens/startup_screen.dart';
 import 'dart:ui';
 import '../rest/signup.dart';
-import 'package:sms_test/widgets/loginpage.dart';
 
 class RegisterPage extends StatefulWidget {
   static const routeName = '/registerpage';

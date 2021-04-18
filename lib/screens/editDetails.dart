@@ -75,8 +75,7 @@ class _EditDetailsState extends State<EditDetails> {
 
         return;
       }
-    }
-    if (_editedUserDetails['userid'].contains('@') &&
+    } else if (_editedUserDetails['userid'].contains('@') &&
         _editedUserDetails['userid'].contains(RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
       String email = _editedUserDetails['userid'].replaceAll(".", "");
@@ -110,35 +109,37 @@ class _EditDetailsState extends State<EditDetails> {
 
   Widget textfield(String initname, bool auth, String label,
       TextInputType keyname, Function validate, Function saved) {
-    if (initname == 'password' || initname == 'cfnpass') {
-      return Column(
+    if (initname == 'cfnpass') {
+      return Row(
         children: <Widget>[
-          TextFormField(
-            cursorColor: Colors.white,
-            obscureText: eyeval,
-            readOnly: initname == 'userid' ? true : !edit,
-            initialValue: _initvalues[initname],
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: label,
-              labelStyle: TextStyle(
-                color: Colors.black54,
+          Expanded(
+            child: TextFormField(
+              cursorColor: Colors.white,
+              obscureText: eyeval,
+              readOnly: initname == 'userid' ? true : !edit,
+              initialValue: _initvalues[initname],
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: label,
+                labelStyle: TextStyle(
+                  color: Colors.black54,
+                ),
+                errorStyle: TextStyle(
+                  color: Colors.red,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
               ),
-              errorStyle: TextStyle(
-                color: Colors.red,
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),
+              keyboardType: keyname,
+              validator: validate,
+              onSaved: saved,
             ),
-            keyboardType: keyname,
-            validator: validate,
-            onSaved: saved,
           ),
-          eyeval
+          !eyeval
               ? IconButton(
                   icon: Icon(Icons.visibility_outlined),
                   onPressed: () {
@@ -195,6 +196,7 @@ class _EditDetailsState extends State<EditDetails> {
         title: Text('Edit Profile'),
         actions: [
           Switch(
+              activeColor: Color.fromRGBO(24, 90, 157, 1),
               value: edit,
               onChanged: (val) {
                 setState(() {
@@ -223,7 +225,7 @@ class _EditDetailsState extends State<EditDetails> {
           children: <Widget>[
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Container(
                   height: screenht * 0.9,
                   decoration: BoxDecoration(
@@ -493,7 +495,7 @@ class _EditDetailsState extends State<EditDetails> {
                   color: Colors.white,
                 ),
                 child: TextButton(
-                  onPressed: () => _submit(context),
+                  onPressed: !edit ? null : () => _submit(context),
                   child: Text(
                     'Submit',
                     style: TextStyle(

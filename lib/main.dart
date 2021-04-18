@@ -5,7 +5,6 @@ import './screens/emergencycontacts.dart';
 import './screens/registerpage.dart';
 import './screens/splash_screen.dart';
 import './screens/startup_screen.dart';
-import './widgets/loginpage.dart';
 import './rest/login.dart';
 import './screens/auth_screen.dart';
 import './screens/location.dart';

@@ -4,8 +4,6 @@ import 'package:sms_test/screens/auth_screen.dart';
 import 'package:sms_test/screens/drawpage.dart';
 import '../rest/login.dart';
 import '../screens/registerpage.dart';
-import '../widgets/loginpage.dart';
-import 'package:provider/provider.dart';
 
 class StartUpScreen extends StatefulWidget {
   static const routename = '/startup';
@@ -141,7 +139,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
     );
   }
 
-  bool eyeval = false;
+  bool eyeval = true;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +277,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  obscureText: true,
+                                  obscureText: eyeval,
                                   decoration: InputDecoration(
                                     hintText: 'Password',
                                     enabledBorder: UnderlineInputBorder(
@@ -303,7 +301,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
                                   keyboardType: TextInputType.text,
                                 ),
                               ),
-                              eyeval
+                              !eyeval
                                   ? IconButton(
                                       icon: Icon(Icons.visibility_outlined),
                                       onPressed: () {
@@ -356,8 +354,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
                           ),
                         ),
                         TextButton(
-                          child: Text('Forgot password?'),
-                        ),
+                            child: Text('Forgot password?'), onPressed: () {}),
                         SizedBox(
                           height: 88,
                         ),

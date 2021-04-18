@@ -140,6 +140,7 @@ class _EmergencyContactsState extends State<EmergencyContacts> {
         backgroundColor: Color.fromRGBO(83, 105, 118, 1),
         actions: [
           Switch(
+              activeColor: Color.fromRGBO(187, 210, 197, 1),
               value: edit,
               onChanged: (val) {
                 setState(() {
