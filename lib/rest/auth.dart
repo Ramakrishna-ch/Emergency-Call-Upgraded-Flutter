@@ -5,16 +5,15 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Auth {
+class Auth with ChangeNotifier {
   String accessToken;
   String tokenType;
   DateTime expiryTime;
-  bool authen = true;
-  void token() {
-    tryAutoAuthenticate();
-    print(authen);
-    if (!authen) {
-      authenticate();
+  bool authen;
+  Future<void> token() async {
+    var checkval = await tryAutoAuthenticate();
+    if (!checkval) {
+      await authenticate();
     }
   }
 
@@ -36,6 +35,7 @@ class Auth {
         final responseData = json.decode(response.body);
         accessToken = responseData['access_token'];
         tokenType = responseData['token_type'];
+        notifyListeners();
         int expiryTime = responseData['expires_in'];
         final prefs = await SharedPreferences.getInstance();
         final tokenData = json.encode({
@@ -45,32 +45,32 @@ class Auth {
               .add(Duration(seconds: expiryTime))
               .toIso8601String(),
         });
-        prefs.setString('tokenData', tokenData);
+        prefs.setString('MapToken', tokenData);
       }
     }
   }
 
-  Future<void> tryAutoAuthenticate() async {
+  Future<bool> tryAutoAuthenticate() async {
     print('auto authenticate start');
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('tokenData')) {
+    if (!prefs.containsKey('MapToken')) {
       print('auto authenticate key empty');
-      authen = false;
-      return;
+
+      return Future.value(false);
     }
     final extractedDataTokenData =
-        json.decode(prefs.getString('tokenData')) as Map<String, Object>;
+        json.decode(prefs.getString('MapToken')) as Map<String, Object>;
+    print(extractedDataTokenData);
     expiryTime = DateTime.parse(extractedDataTokenData['expiryTime']);
     if (expiryTime.isBefore(DateTime.now())) {
       print('auto authenticate token expired');
-      authen = false;
-      return;
+      return Future.value(false);
     }
 
     tokenType = extractedDataTokenData['token_type'];
     accessToken = extractedDataTokenData['access_token'];
-    print(tokenType + accessToken);
-    authen = true;
-    return;
+    notifyListeners();
+
+    return Future.value(true);
   }
 }

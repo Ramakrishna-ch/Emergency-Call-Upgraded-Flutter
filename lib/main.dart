@@ -1,4 +1,8 @@
 import 'package:provider/provider.dart';
+import 'package:sms_test/rest/auth.dart';
+import 'package:sms_test/rest/getDetails.dart';
+import 'package:sms_test/rest/getdata.dart';
+import 'package:sms_test/rest/location.dart';
 import './screens/drawpage.dart';
 import './screens/editDetails.dart';
 import './screens/emergencycontacts.dart';
@@ -7,8 +11,12 @@ import './screens/splash_screen.dart';
 import './screens/startup_screen.dart';
 import './rest/login.dart';
 import './screens/auth_screen.dart';
-import './screens/location.dart';
 import 'package:flutter/material.dart';
+import './widgets/accidentpage.dart';
+import './widgets/firepage.dart';
+import './widgets/nature.dart';
+import './widgets/theftpage.dart';
+import './widgets/womenpage.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,6 +30,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Login(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => LocationClass(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: GetData(),
+        ),
+        ChangeNotifierProvider.value(
+          value: GetDetails(),
+        ),
       ],
       child: Consumer<Login>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -30,7 +53,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: auth.isauth
-              ? DrawPage()
+              ? HomePage()
               : FutureBuilder(
                   future: auth.checkuser(),
                   builder: (ctx, autosnap) =>
@@ -40,12 +63,16 @@ class MyApp extends StatelessWidget {
                 ),
           routes: {
             AuthScreen.routeName: (ctx) => AuthScreen(),
-            GetLocationPage.routeName: (ctx) => GetLocationPage(),
             RegisterPage.routeName: (ctx) => RegisterPage(),
             StartUpScreen.routename: (ctx) => StartUpScreen(),
-            DrawPage.routename: (ctx) => DrawPage(),
+            HomePage.routeName: (ctx) => HomePage(),
             EditDetails.routename: (ctx) => EditDetails(),
             EmergencyContacts.routename: (ctx) => EmergencyContacts(),
+            NaturalCalamityScreen.routeName: (ctx) => NaturalCalamityScreen(),
+            WomenHarassScreen.routeName: (ctx) => WomenHarassScreen(),
+            TheftScreen.routeName: (ctx) => TheftScreen(),
+            AccidentScreen.routeName: (ctx) => AccidentScreen(),
+            FireScreen.routeName: (ctx) => FireScreen(),
           },
         ),
       ),

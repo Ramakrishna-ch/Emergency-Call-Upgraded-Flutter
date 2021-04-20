@@ -29,6 +29,10 @@ dependencies:
   http: ^0.12.2
   clippy_flutter: ^1.1.1
   easy_gradient_text: ^1.0.0
+  foldable_sidebar: ^1.0.0
+  slimy_card: ^1.0.4
+  url_launcher: ^5.7.10
+  js: ^0.6.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -52,11 +56,25 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/accident.jpeg
-    - assets/disaster.jpeg
-    - assets/fire1.jpeg
-    - assets/theft.jpeg
-    - assets/women1.jpeg
+    - assets/images/2.png
+    - assets/images/3.png
+    - assets/images/8.jpg
+    - assets/images/6.jpg
+    - assets/images/9.jpg
+    - assets/images/10.jpg
+    - assets/images/15.jpg
+    # - assets/images/defence.jpg
+    - assets/images/111.jpg
+    - assets/images/burglar.png
+    - assets/images/ambul.png
+    - assets/images/tornado.png
+    - assets/images/dis.jpg
+    - assets/images/disaster.jpeg
+
+    - assets/images/medicalvan.png
+    - assets/images/DOC_hero.png
+    # - assets/images/shake_phone.jpg
+    - assets/images/main.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

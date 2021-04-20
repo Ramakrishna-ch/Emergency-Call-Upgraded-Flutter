@@ -112,7 +112,7 @@ class _StartUpScreenState extends State<StartUpScreen> {
                   await check1('true', type, id);
                   Navigator.of(context1).pop();
                   Navigator.of(context)
-                      .pushReplacementNamed(DrawPage.routename);
+                      .pushReplacementNamed(HomePage.routeName);
                 } catch (e) {
                   print(e);
                   Navigator.of(context1).pop();

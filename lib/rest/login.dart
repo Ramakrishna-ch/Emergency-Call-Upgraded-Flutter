@@ -41,6 +41,7 @@ class Login with ChangeNotifier {
         throw ('Wrong password');
       }
       extractedData.forEach((key, value) => userdat[key] = value?.toString());
+      emerContacts.clear();
       emerContacts.addAll(userdat['emercontacts'].split(" "));
       userdat.remove('emercontacts');
       // userdat = extractedData as Map<String, String>;
@@ -118,6 +119,7 @@ class Login with ChangeNotifier {
         _userid = extractedDataTokenData['userid'];
         _type = extractedDataTokenData['type'];
         extractedData.forEach((key, value) => userdat[key] = value?.toString());
+        emerContacts.clear();
         emerContacts.addAll(userdat['emercontacts'].split(" "));
         userdat.remove('emercontacts');
         userdat.remove('auto');

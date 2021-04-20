@@ -1,4 +1,3 @@
-import '../screens/location.dart';
 import 'package:flutter/material.dart';
 import '../rest/auth.dart';
 import '../rest/login.dart';
@@ -65,7 +64,7 @@ class _AuthScreenState extends State<AuthScreen> {
               //       'tokenType': tokentype,
               //       'accessToken': accesstoken,
               //     });
-              Navigator.pushNamed(context, DrawPage.routename);
+              // Navigator.pushNamed(context, DrawPage.routename);
             },
           ),
         ],

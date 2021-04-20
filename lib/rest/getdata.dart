@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 import '../rest/auth.dart';
 
-class GetData {
+class GetData with ChangeNotifier {
   var contents;
   Future<void> getPlaces(
       String tokenType1, String accessToken1, String locationdat) async {
@@ -20,11 +21,10 @@ class GetData {
         'Authorization': "$tokenType1 $accessToken1",
       },
     );
-    contents = response.body;
-    print(response.body);
-  }
 
-  String copycontent() {
-    return json.decode(contents)["suggestedLocations"][0]['eLoc'];
+    // contents = json.decode(response.body)["suggestedLocations"][0]['eLoc'];
+    final sample = json.decode(response.body);
+    contents = sample["suggestedLocations"][0]['eLoc'];
+    notifyListeners();
   }
 }

@@ -71,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _showToast(BuildContext context, String message) {
-    final scaffold = ScaffoldMessenger.of(context);
+    final scaffold = Scaffold.of(context);
     scaffold.showSnackBar(
       SnackBar(
         content: Text(message),
