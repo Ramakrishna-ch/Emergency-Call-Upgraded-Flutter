@@ -32,7 +32,7 @@ dependencies:
   foldable_sidebar: ^1.0.0
   slimy_card: ^1.0.4
   url_launcher: ^5.7.10
-  js: ^0.6.2
+  sms_maintained: ^0.2.5
 
 
   # The following adds the Cupertino Icons font to your application.

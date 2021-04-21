@@ -3,6 +3,7 @@ import 'package:sms_test/rest/auth.dart';
 import 'package:sms_test/rest/getDetails.dart';
 import 'package:sms_test/rest/getdata.dart';
 import 'package:sms_test/rest/location.dart';
+import 'package:sms_test/rest/sms.dart';
 import './screens/drawpage.dart';
 import './screens/editDetails.dart';
 import './screens/emergencycontacts.dart';
@@ -44,6 +45,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: GetDetails(),
+        ),
+        ChangeNotifierProvider.value(
+          value: SmsSend(),
         ),
       ],
       child: Consumer<Login>(

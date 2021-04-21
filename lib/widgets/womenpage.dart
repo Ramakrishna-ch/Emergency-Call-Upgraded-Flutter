@@ -5,7 +5,9 @@ import 'package:sms_test/rest/auth.dart';
 import 'package:sms_test/rest/getDetails.dart';
 import 'package:sms_test/rest/getdata.dart';
 import 'package:sms_test/rest/location.dart';
+import 'package:sms_test/rest/sms.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../rest/login.dart';
 
 _launchURLBrowser() async {
   const url = 'https://youtu.be/33fVFazP2jc';
@@ -16,18 +18,47 @@ _launchURLBrowser() async {
   }
 }
 
-class WomenHarassScreen extends StatelessWidget {
+class WomenHarassScreen extends StatefulWidget {
   static const routeName = '/women-screen';
 
-  Future<void> sendMessage(BuildContext context, String locval, String type,
-      String token, String mapdata, Map<String, String> authdata) async {
+  @override
+  _WomenHarassScreenState createState() => _WomenHarassScreenState();
+}
+
+class _WomenHarassScreenState extends State<WomenHarassScreen> {
+  Future<void> sendMessage(
+      BuildContext context,
+      String locval,
+      String type,
+      String token,
+      String mapdata,
+      Map<String, String> authdata,
+      String id,
+      List<String> contacts) async {
     Provider.of<LocationClass>(context, listen: false).showloc();
     await Provider.of<Auth>(context, listen: false).token();
 
     await Provider.of<GetData>(context, listen: false)
         .getPlaces(type, token, locval);
     await Provider.of<GetDetails>(context, listen: false).fetchDat(mapdata);
-    print(authdata);
+    String message =
+        "Emergency for $id at\nLocation: " + locval + "\nTake Action!!!";
+    contacts.forEach((element) {
+      Provider.of<SmsSend>(context, listen: false).sendSms(message, element);
+    });
+  }
+
+  bool initval = false;
+  @override
+  void didChangeDependencies() {
+    if (!initval) {}
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -37,6 +68,9 @@ class WomenHarassScreen extends StatelessWidget {
     final locval = Provider.of<LocationClass>(context).userLocation;
     final mapdata = Provider.of<GetData>(context).contents;
     final authdata = Provider.of<GetDetails>(context).authorityData;
+    final userid = Provider.of<Login>(context).userdat['name'];
+    final contacts = Provider.of<Login>(context).emerContacts;
+
     return Scaffold(
       backgroundColor: Color(0xFFb6fbff),
       appBar: AppBar(
@@ -68,7 +102,9 @@ class WomenHarassScreen extends StatelessWidget {
                     type,
                     token,
                     mapdata,
-                    authdata),
+                    authdata,
+                    userid,
+                    contacts),
                 bottomCardWidget: bottomCardWidget(),
               ),
             ],
@@ -78,8 +114,16 @@ class WomenHarassScreen extends StatelessWidget {
     );
   }
 
-  Widget topCardWidget(String imagePath, BuildContext context, String locval,
-      String type, String token, String mapdata, Map<String, String> authdata) {
+  Widget topCardWidget(
+      String imagePath,
+      BuildContext context,
+      String locval,
+      String type,
+      String token,
+      String mapdata,
+      Map<String, String> authdata,
+      String id,
+      List<String> contacts) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -125,8 +169,8 @@ class WomenHarassScreen extends StatelessWidget {
             size: 24.0,
           ),
           label: Text('Women Police Help'),
-          onPressed: () =>
-              sendMessage(context, locval, type, token, mapdata, authdata),
+          onPressed: () => sendMessage(
+              context, locval, type, token, mapdata, authdata, id, contacts),
           style: ElevatedButton.styleFrom(
             shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(16.0),
