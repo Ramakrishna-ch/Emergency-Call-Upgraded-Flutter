@@ -10,11 +10,12 @@ class Auth with ChangeNotifier {
   String tokenType;
   DateTime expiryTime;
   bool authen;
-  Future<void> token() async {
+  Future<Map<String, String>> token() async {
     var checkval = await tryAutoAuthenticate();
     if (!checkval) {
       await authenticate();
     }
+    return {'token': accessToken, 'type': tokenType};
   }
 
   Future<void> authenticate() async {

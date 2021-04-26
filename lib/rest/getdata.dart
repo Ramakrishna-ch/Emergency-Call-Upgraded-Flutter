@@ -7,7 +7,7 @@ import '../rest/auth.dart';
 
 class GetData with ChangeNotifier {
   var contents;
-  Future<void> getPlaces(
+  Future<String> getPlaces(
       String tokenType1, String accessToken1, String locationdat) async {
     print(tokenType1);
     print(accessToken1);
@@ -26,5 +26,6 @@ class GetData with ChangeNotifier {
     final sample = json.decode(response.body);
     contents = sample["suggestedLocations"][0]['eLoc'];
     notifyListeners();
+    return contents;
   }
 }

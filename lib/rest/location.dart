@@ -21,11 +21,13 @@ class LocationClass with ChangeNotifier {
     }
   }
 
-  void showloc() {
+  Future<String> showloc() async {
     if (userLocation == null ||
         expiry == null ||
         !expiry.isAfter(DateTime.now().subtract(Duration(minutes: 2)))) {
-      getLocation();
+      await getLocation();
+      return userLocation;
     }
+    return userLocation;
   }
 }

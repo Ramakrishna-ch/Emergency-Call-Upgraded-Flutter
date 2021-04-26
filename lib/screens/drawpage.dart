@@ -75,8 +75,10 @@ class _HomePageState extends State<HomePage> {
     final screenwt = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff99ccff),
+        title: Text('Emergency Call',style: TextStyle(color: Color.fromRGBO(135, 73, 214, 1),fontSize: 16),),
+        backgroundColor: Color.fromRGBO(116, 235, 213, 1),
         leading: IconButton(
+          color: Color.fromRGBO(135, 73, 214, 1),
           onPressed: () {
             setState(() {
               drawerStatus = drawerStatus == FSBStatus.FSB_OPEN
@@ -84,11 +86,18 @@ class _HomePageState extends State<HomePage> {
                   : FSBStatus.FSB_OPEN;
             });
           },
-          icon: Icon(Icons.menu),
+          icon: Icon(
+            Icons.menu,
+            color: Color.fromRGBO(135, 73, 214, 1),
+          ),
         ),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.logout), onPressed: () => _showToast1(context)),
+              icon: Icon(
+                Icons.logout,
+                color: Color.fromRGBO(135, 73, 214, 1),
+              ),
+              onPressed: () => _showToast1(context)),
         ],
       ),
       body: FoldableSidebarBuilder(
@@ -103,20 +112,7 @@ class _HomePageState extends State<HomePage> {
         screenContents: BodyWidget(screenwt: screenwt),
         status: drawerStatus,
       ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.deepOrange,
-          child: Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
-          onPressed: () async {
-            // setState(() {
-            //   drawerStatus = drawerStatus == FSBStatus.FSB_OPEN
-            //       ? FSBStatus.FSB_CLOSE
-            //       : FSBStatus.FSB_OPEN;
-            // });
-            await Provider.of<LocationClass>(context, listen: false).showloc();
-          }),
+     
     );
   }
 }
@@ -133,6 +129,7 @@ class BodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var name = Provider.of<Login>(context).userdat['name'];
     return Stack(
       children: [
         Container(
@@ -141,23 +138,8 @@ class BodyWidget extends StatelessWidget {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-                // Color(0xFF9ECCFA),
-                // Color(0xFF91C5F8),
-                // Color(0xFF6797F6),
-                // Color(0xFF59AAFB),
-                // Color(0xFF1B94DA),
-                // Color(0xFF1892CA),
-                // Color(0xFF2379CF),
-                // Color(0xFF2F72B6),
-                // Color(0xFF1578E9),
-                // Color(0xFF2ECFD4),
-                Color(0xFF6190e8),
-                Color(0xFFa7bfe8),
-                Color(0xFF6190e8),
-                Color(0xFFa7bfe8),
-                // Color(0xFF6190e8),
-                // Color(0xFFa7bfe8),
-                // Color(0xFF6190e8),
+                Color.fromRGBO(116, 235, 213, 1),
+                Color.fromRGBO(172, 182, 229, 1),
               ],
             ),
             // image: DecorationImage(
@@ -166,6 +148,7 @@ class BodyWidget extends StatelessWidget {
             //     ),
           ),
         ),
+        Positioned(child: Text('Hi $name, Incase of \n    Emergency press below',style: TextStyle(fontSize: 16),),top: 10,left: 60,),
         Positioned(
           top: 140,
           left: screenwt * 0.305,
