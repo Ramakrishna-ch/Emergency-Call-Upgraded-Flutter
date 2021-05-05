@@ -4,6 +4,7 @@ import 'package:sms_test/rest/getDetails.dart';
 import 'package:sms_test/rest/getdata.dart';
 import 'package:sms_test/rest/location.dart';
 import 'package:sms_test/rest/sms.dart';
+import 'package:sms_test/widgets/mapview.dart';
 import './screens/drawpage.dart';
 import './screens/editDetails.dart';
 import './screens/emergencycontacts.dart';
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
             TheftScreen.routeName: (ctx) => TheftScreen(),
             AccidentScreen.routeName: (ctx) => AccidentScreen(),
             FireScreen.routeName: (ctx) => FireScreen(),
+            WebView1.routename: (ctx) => WebView1(),
           },
         ),
       ),

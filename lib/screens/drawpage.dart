@@ -3,8 +3,9 @@ import 'package:clippy_flutter/arc.dart';
 import 'package:foldable_sidebar/foldable_sidebar.dart';
 import 'package:sms_test/rest/auth.dart';
 import 'package:sms_test/rest/location.dart';
+import 'package:sms_test/widgets/mapview.dart';
 import '../widgets/main_drawer.dart';
-
+import '../screens/startup_screen.dart';
 import '../rest/login.dart';
 import 'package:provider/provider.dart';
 
@@ -32,8 +33,8 @@ class _HomePageState extends State<HomePage> {
                   Provider.of<Login>(context, listen: false).logout();
 
                   Navigator.of(context1).pop();
-                  // Navigator.of(context)
-                  //     .pushReplacementNamed(StartUpScreen.routename);
+                  Navigator.of(context)
+                      .pushReplacementNamed(StartUpScreen.routename);
                 } catch (e) {
                   print(e);
                 }
@@ -75,7 +76,11 @@ class _HomePageState extends State<HomePage> {
     final screenwt = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emergency Call',style: TextStyle(color: Color.fromRGBO(135, 73, 214, 1),fontSize: 16),),
+        title: Text(
+          'Emergency Call',
+          style:
+              TextStyle(color: Color.fromRGBO(135, 73, 214, 1), fontSize: 16),
+        ),
         backgroundColor: Color.fromRGBO(116, 235, 213, 1),
         leading: IconButton(
           color: Color.fromRGBO(135, 73, 214, 1),
@@ -98,6 +103,11 @@ class _HomePageState extends State<HomePage> {
                 color: Color.fromRGBO(135, 73, 214, 1),
               ),
               onPressed: () => _showToast1(context)),
+          IconButton(
+              icon: Icon(Icons.open_in_browser),
+              onPressed: () {
+                Navigator.of(context).pushNamed(WebView1.routename);
+              })
         ],
       ),
       body: FoldableSidebarBuilder(
@@ -112,7 +122,6 @@ class _HomePageState extends State<HomePage> {
         screenContents: BodyWidget(screenwt: screenwt),
         status: drawerStatus,
       ),
-     
     );
   }
 }
@@ -148,7 +157,14 @@ class BodyWidget extends StatelessWidget {
             //     ),
           ),
         ),
-        Positioned(child: Text('Hi $name, Incase of \n    Emergency press below',style: TextStyle(fontSize: 16),),top: 10,left: 60,),
+        Positioned(
+          child: Text(
+            'Hi $name, Incase of \n    Emergency press below',
+            style: TextStyle(fontSize: 16),
+          ),
+          top: 10,
+          left: 60,
+        ),
         Positioned(
           top: 140,
           left: screenwt * 0.305,

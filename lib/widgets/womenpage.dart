@@ -6,6 +6,7 @@ import 'package:sms_test/rest/getDetails.dart';
 import 'package:sms_test/rest/getdata.dart';
 import 'package:sms_test/rest/location.dart';
 import 'package:sms_test/rest/sms.dart';
+import 'package:sms_test/widgets/mapview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../rest/login.dart';
 
@@ -34,7 +35,9 @@ class _WomenHarassScreenState extends State<WomenHarassScreen> {
 
     var mapdata1 = await Provider.of<GetData>(context, listen: false)
         .getPlaces(tokendat['type'], tokendat['token'], locval1);
-    await Provider.of<GetDetails>(context, listen: false).fetchDat(mapdata1);
+    var eloc = mapdata1['eloc'];
+    var points = mapdata1['points'];
+    await Provider.of<GetDetails>(context, listen: false).fetchDat(eloc);
     String message =
         "Emergency for $id at\nLocation: https://maps.google.com/maps/?q=" +
             locval1 +
@@ -42,6 +45,7 @@ class _WomenHarassScreenState extends State<WomenHarassScreen> {
     contacts.forEach((element) {
       Provider.of<SmsSend>(context, listen: false).sendSms(message, element);
       _showToast(context, 'SMS sent successfully.');
+      Navigator.of(context).pushNamed(WebView1.routename, arguments: points);
     });
   }
 
@@ -54,6 +58,7 @@ class _WomenHarassScreenState extends State<WomenHarassScreen> {
       ),
     );
   }
+
   bool initval = false;
   @override
   void didChangeDependencies() {

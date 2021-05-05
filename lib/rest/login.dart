@@ -74,7 +74,7 @@ class Login with ChangeNotifier {
       _userid = id['userid'];
       _type = type;
       userdat['userid'] = _userid;
-      print(_type);
+      print(userdat);
       if (_type == 'email') {
         String sample = _userid.replaceAll('gmailcom', '@gmail.com');
         userdat['userid'] = sample;

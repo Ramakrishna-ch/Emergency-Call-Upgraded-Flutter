@@ -8,6 +8,7 @@ import '../rest/location.dart';
 import '../rest/login.dart';
 import '../rest/sms.dart';
 import 'package:provider/provider.dart';
+import 'package:sms_test/widgets/mapview.dart';
 
 _launchURLBrowser() async {
   const url = 'https://youtu.be/33fVFazP2jc';
@@ -29,17 +30,21 @@ class FireScreen extends StatelessWidget {
 
     var mapdata1 = await Provider.of<GetData>(context, listen: false)
         .getPlaces(tokendat['type'], tokendat['token'], locval1);
-    await Provider.of<GetDetails>(context, listen: false).fetchDat(mapdata1);
+    var eloc = mapdata1['eloc'];
+    var points = mapdata1['points'];
+    await Provider.of<GetDetails>(context, listen: false).fetchDat(eloc);
     String message =
         "Emergency for $id at\nLocation: https://maps.google.com/maps/?q=" +
             locval1 +
             "\nTake Action!!!";
     contacts.forEach((element) {
       Provider.of<SmsSend>(context, listen: false).sendSms(message, element);
-       _showToast(context, 'SMS sent successfully.');
+      _showToast(context, 'SMS sent successfully.');
+      Navigator.of(context).pushNamed(WebView1.routename, arguments: points);
     });
   }
-void _showToast(BuildContext context, String message) {
+
+  void _showToast(BuildContext context, String message) {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
@@ -48,6 +53,7 @@ void _showToast(BuildContext context, String message) {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final userid = Provider.of<Login>(context).userdat['name'];
